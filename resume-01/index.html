@@ -27,9 +27,6 @@
 		</style>
 	</head>
 	<body>
-		<div id="siteWelcome" class="site-welcome active">
-			<div class="loading"></div>
-		</div>
 		<div id="topNavBar" class="topNavBar">
 			<div class="topNavBar-inner clearfix">
 				<a class="logo" alt="logo" href="#" style="float: left;">
@@ -66,8 +63,8 @@
 		<div class="banner">
 			<div class="mask"></div>
 		</div>
-		<main id="siteAbout">
-		<div class="userCard">
+		<main>
+		<div data-x id="siteAbout" class="userCard">
 			<div class="textAndPicture clearfix">
 				<div class="picture">
 					<img src="./img/avatar.jpg" alt="头像">
@@ -121,7 +118,7 @@
 		梁璐，新人前端工程师。
 		</p>
 		</main>
-		<section id="siteSkills" class="skills">
+		<section data-x id="siteSkills" class="skills">
 			<h2>专业技能</h2>
 			<ol class="clearfix">
 				<li>
@@ -168,7 +165,7 @@
 				</li>
 			</ol>
 		</section>
-		<section id="siteWorks" class="portfolio">
+		<section data-x id="siteWorks" class="portfolio">
 			<h2>作品集</h2>
 			<nav>
 				<ol class="clearfix">
@@ -205,17 +202,41 @@
 		</section>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
 		<script>
-		setTimeout(function(){
-			siteWelcome.classList.remove('active')
-		},1000)
-
+		let specialTags = document.querySelectorAll('[data-x]')		
+		for(let i=0; i<specialTags.length; i++){
+				specialTags[i].classList.add('offset')
+			}				
+		yyy()
 		window.onscroll = function(xxxxx){
 			if(window.scrollY > 0){
 				topNavBar.classList.add('sticky')
 			}else{
 				topNavBar.classList.remove('sticky')
 			}
+
+			yyy()
 		}
+
+		function yyy(){
+			let specialTags = document.querySelectorAll("[data-x]")
+			let minIndex = 0
+			for(let i=1; i<specialTags.length; i++){
+				if(Math.abs(specialTags[i].offsetTop - window.scrollY) < Math.abs(specialTags[minIndex].offsetTop-window.scrollY)){
+					minIndex = i
+				}				
+			}
+			specialTags[minIndex].classList.remove('offset')
+			let id = specialTags[minIndex].id
+			let a = document.querySelector('a[href="#'+ id + '"]')
+			let li = a.parentNode
+			let brotherAndMe = li.parentNode.children
+			for(let i=0; i<brotherAndMe.length; i++){
+				brotherAndMe[i].classList.remove('highlight')
+			}
+			li.classList.add('highlight')
+		}
+		
+
 
 		let liTags = document.querySelectorAll('nav.menu > ul > li')
 		for(let i=0; i<liTags.length; i++){
