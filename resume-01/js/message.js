@@ -7,13 +7,13 @@
       AV.init({appId: APP_ID,appKey: APP_KEY})
     },
     fetch: function(){
-      var query = new AV.Query('Message');
-      query.find()
+      var query = new AV.Query('Message')
+      return query.find()
     },
-    save: function(){
+    save: function(name, content){
       var Message = AV.Object.extend('Message');
       var message = new Message();
-      message.save({
+      return message.save({
           content: content,
           name: name
         })
@@ -34,7 +34,7 @@
       this.bindEvents()
     },
     loadMessages: function(){
-      this.model.fetch.then(
+      this.model.fetch().then(
         (message)=>{
         let array = message.map((item)=> item.attributes )
         array.forEach((item)=>{
@@ -55,7 +55,7 @@
       let myForm = this.form
       let content = myForm.querySelector('input[name=content]').value
       let name = myForm.querySelector('input[name=name]').value
-      this.model.save.then(function(object) {
+      this.model.save(name, content).then(function(object) {
           let li = document.createElement('li')
           li.innerText = `${object.attributrs.name}: ${object.attributes.content}`
           let messageList = document.querySelector('#messageList')
@@ -65,5 +65,5 @@
         })
     }
   }
-  controller.init(view)  
+  controller.init(view, model)  
 }.call()
