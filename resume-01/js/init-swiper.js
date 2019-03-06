@@ -1,5 +1,5 @@
 !function(){
-    var view = view('#mySlides')
+    var view = View('#mySlides')
     var controller = {
       view: null, 
       swiper: null,
