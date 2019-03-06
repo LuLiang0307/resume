@@ -1,30 +1,3 @@
-// !function(){
-//     var view = document.querySelector('#topNavBar')
-//     var controller = {
-//         view: null,
-//         init: function(view){
-//             this.view = view
-//             this.bindEvents()//this.bandEvents.call(this)
-//         },
-//         bindEvents: function(view){
-//             var view = this.view
-//             window.addEventListener('scroll',(x)=>{//箭头函数没有this，往上找确定this值
-//                 if(window.scrollY > 0){
-//                     this.active()
-//                 }else{
-//                     this.deactive()
-//                 }
-//             })
-//         },
-//         active: function(){
-//             this.view.classList.add('sticky')
-//         },
-//         deactive: function(){
-//             this.view.classList.remove('sticky')
-//         },
-//     }
-//     controller.init(view)
-// }.call()
 !function (){
     // 添加 offset 类
     var specialTags = document.querySelectorAll('[data-x]')
