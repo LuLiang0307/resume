@@ -1,29 +1,34 @@
 !function(){
-  var view = document.querySelector('section.message')
   var model = {
+    // 获取数据
     init: function(){
-      var APP_ID = 'rCwH8Apt0eMqF8L5eX51eXYy-gzGzoHsz';
-      var APP_KEY = 'a97cELdbFXVms1mnyBG5WYH6';
+      var APP_ID = 'rCwH8Apt0eMqF8L5eX51eXYy-gzGzoHsz'
+      var APP_KEY = 'a97cELdbFXVms1mnyBG5WYH6'
       AV.init({appId: APP_ID,appKey: APP_KEY})
     },
-    fetch: function(){
-      var query = new AV.Query('Message')
-      return query.find()
+    fetch: function(){ 
+      var query = new AV.Query('Message');
+      return query.find() // Promise 对象
     },
+    // 创建数据
     save: function(name, content){
       var Message = AV.Object.extend('Message');
       var message = new Message();
-      return message.save({
-          'content': content,
-          'name': name
-        })
+      return message.save({  // Promise 对象
+        'name': name,
+        'content': content
+      })
     }
   }
+
+  var view = document.querySelector('section.message')
+
+
   var controller = {
     view: null,
     model: null,
     messageList: null,
-    init: function(view,model){
+    init: function(view, model){
       this.view = view
       this.model = model
 
@@ -35,43 +40,39 @@
     },
     loadMessages: function(){
       this.model.fetch().then(
-        (message)=>{
-        let array = message.map((item)=> item.attributes )
-        array.forEach((item)=>{
-          let li = document.createElement('li')
-          li.innerText = `${item.name}: ${item.content}`
-          this.messageList.appendChild(li)
+        (messages) => {
+          let array = messages.map((item)=> item.attributes )
+          array.forEach((item)=>{
+            let li = document.createElement('li')
+            li.innerText = `${item.name}: ${item.content}`
+            this.messageList.appendChild(li)
           })
-        }
+        } 
       )
     },
     bindEvents: function(){
       this.form.addEventListener('submit', (e)=>{
         e.preventDefault()
         this.saveMessage()
-        console.log(2)
       })
     },
     saveMessage: function(){
       let myForm = this.form
-      console.log(1)
       let content = myForm.querySelector('input[name=content]').value
       let name = myForm.querySelector('input[name=name]').value
-      if(content==""||content==null){
-        return false;
-      }
-      if(name==""||name==null){
-        return false;
-      }
-      this.model.save(name, content).then(function(object){
-          let li = document.createElement('li')
-          li.innerText = `${object.attributrs.name}: ${object.attributes.content}`
-          let messageList = this.view.querySelector('#messageList')
-          messageList.appendChild(li)
-          myForm.querySelector('input[name=content]').value = ''
-          console.log(object)
-        })
+      this.model.save(name, content).then(function(object) {
+        let li = document.createElement('li')
+        li.innerText = `${object.attributes.name}: ${object.attributes.content}`
+        let messageList = document.querySelector('#messageList')
+        messageList.appendChild(li)
+        myForm.querySelector('input[name=content]').value = ''
+        console.log(object)
+      })
     }
+
   }
+
   controller.init(view, model)
+
+
 }.call()
