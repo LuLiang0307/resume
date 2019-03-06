@@ -14,16 +14,16 @@
       var Message = AV.Object.extend('Message');
       var message = new Message();
       return message.save({
-          content: content,
-          name: name
+          'content': content,
+          'name': name
         })
     }
   }
   var controller = {
     view: null,
-    messageList: null,
     model: null,
-    init: function(view){
+    messageList: null,
+    init: function(view,model){
       this.view = view
       this.model = model
 
@@ -49,21 +49,29 @@
       this.form.addEventListener('submit', (e)=>{
         e.preventDefault()
         this.saveMessage()
+        console.log(2)
       })
     },
     saveMessage: function(){
       let myForm = this.form
+      console.log(1)
       let content = myForm.querySelector('input[name=content]').value
       let name = myForm.querySelector('input[name=name]').value
-      this.model.save(name, content).then(function(object) {
+      if(content==""||content==null){
+        return false;
+      }
+      if(name==""||name==null){
+        return false;
+      }
+      this.model.save(name, content).then(function(object){
           let li = document.createElement('li')
           li.innerText = `${object.attributrs.name}: ${object.attributes.content}`
-          let messageList = document.querySelector('#messageList')
+          let messageList = this.view.querySelector('#messageList')
           messageList.appendChild(li)
           myForm.querySelector('input[name=content]').value = ''
           console.log(object)
         })
     }
   }
-  controller.init(view, model)  
+  controller.init(view, model)
 }.call()
